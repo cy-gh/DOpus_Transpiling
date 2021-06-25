@@ -1,0 +1,16 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "npm",
+			"script": "install",
+			"problemMatcher": [],
+			"label": "npm: install",
+			"detail": "npx tsc --target es3 --lib es5,scripthost --out CuTranspilePOC2.js --declaration index.ts ID_Validators.ts StringValidator.ts && copy CuTranspilePOC2.js \"%HOMEDRIVE%%HOMEPATH%\\AppData\\Roaming\\GPSoftware\\Directory Opus\\Script AddIns\"",
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			}
+		}
+	]
+}
