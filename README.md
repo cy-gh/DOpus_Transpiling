@@ -6,7 +6,7 @@ Sweet news first: From TypeScript to JScript transpiled files work in DOpus! :ta
 
 Update 20210627:
 
-*The [Variant 1 & 2 on Github](https://github.com/cy-gh/DOpus_Transpiling) are working albeit misleading examples. Particularly, variant 2 might have misled you to think, it's very similar to standard ```export``` in one file, ```import``` pair in the other. While the modules may use standard export syntax for modules or namespaces, the consumers may not use import statement. after failed tests with including npm nodules, trying to make unit-tests with mocha and before coming to the realization that jScript's lack of export support cannot be tricked.* :frowning:
+*The [Variant 1 & 2 on Github](https://github.com/cy-gh/DOpus_Transpiling) are working albeit misleading examples. Particularly, variant 2 might have misled you to think, it's very similar to standard ```export``` in one file, ```import``` pair in the other. While the modules may use standard export syntax for modules or namespaces, the consumers may not use import statement. after failed tests with including npm nodules, trying to make unit-tests with mocha and before coming to the realization that jScript's lack of export support cannot be tricked.* :neutral_face:
 
 See below for a minimal-ish boilerplate code.
 
@@ -118,7 +118,7 @@ As the example above shows, you have to keep the following in mind to make the o
 * You may use ```module/namespace``` but not ```export module/namespace```.
 * No ```import``` anywhere in the whole chain, period. That means most if not all npm modules cannot be included, and also no unit tests.
 * Top level attributes, classes, etc. can be directly accessed in the caller; VSC takes care of the name resolution.
-* When namespaces/modules are used, you must use ```export class```, ```export enum```, etc. and they can be only addressed via fully-qualified names, e.g. ```new ID_Validators.IMDB_ID_Validator();```. This circumvents the import statement.
+* When namespaces/modules are used, you must use ```export class```, ```export enum```, etc. and they can be only addressed via fully-qualified names, e.g. ```new libLogger.Logger();```. This circumvents the import statement.
 * If you don't use the triple slash directive reference path, the module file must be specified in the compiled files list, e.g. ```tsc ... --outfile out.js libmodule.ts index.ts```.
 
 ## What does not work?
@@ -132,16 +132,16 @@ Update 20210627:
    ```javascript
    var htmlfile = Server.CreateObject('htmlfile');
    htmlfile.write('<meta http-equiv="x-ua-compatible" content="IE=9" />');
-   
+
    // expose more modern methods from htmlfile
    var JSON = htmlfile.parentWindow.JSON;
    String.prototype.trim = htmlfile.parentWindow.String.prototype.trim;
    Array.prototype.indexOf = htmlfile.parentWindow.Array.prototype.indexOf;
    Array.prototype.forEach = htmlfile.parentWindow.Array.prototype.forEach;
    Object.keys = htmlfile.parentWindow.Object.keys;
-   
+
    htmlfile.close(); // no longer needed
-   
+
    // demonstrate JSON.parse() and String.trim()
    var strJSON = '{ "item1": "          val1 needs trimmed.          " }';
    var objFromJSON = JSON.parse(strJSON);
@@ -150,7 +150,7 @@ Update 20210627:
 
    It's mildly surprising because I was already using JSON.stringify/parse without this trick before and trim() is easy to fix, but I welcome Array.forEach() and Object.keys().
 
-2. After some initial testing, it turns out npm modules will not work. The reason is even the most basic ones define their exports and imports, which tsc lets slip into the output file and of course they don't work in JScript. I've also tried [browserify](https://browserify.org/) (and tsify), which is a real marvel on its own, but unfortunately it did not help either. 
+2. After some initial testing, it turns out npm modules will not work. The reason is even the most basic ones define their exports and imports, which tsc lets slip into the output file and of course they don't work in JScript. I've also tried [browserify](https://browserify.org/) (and tsify), which is a real marvel on its own, but unfortunately it did not help either.
 
 ## Pros & Cons of Transpiling and TypeScript
 
